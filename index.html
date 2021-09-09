@@ -5,21 +5,29 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
         <meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<link rel="stylesheet" href="./style.css"></link>
-		<script src="./jquery-3.6.0.min.js" type="application/javascript"></script>
+		<link rel="stylesheet/less" type="text/css" href="./style.less" />
+		<script src="./js/less@4.1.1" ></script>
+		<script src="./js/jquery-3.6.0.min.js" type="application/javascript"></script>
 		<script type="module" src="./script.js"></script>
 	</head>
 	<body>
-		<h1>Schnabeltiere - Fat Plat</h1>
-		<div id="status"></div>
-		<button id="connectMetamask">Connect MetaMask</button>
-		<br />
-		<br />
-		<div class="hidden">
-			<div id="nftCost"></div>
-			<input id="nftAmount" type="number" min="1" max="20" step="1" value="1"/>
-			<button id="claimNFT">Claim</button>
-		</div>
+		<main>
+			<h1>Schnabeltiere - Fat Plat</h1>
+			<div id="status"></div>
+			<button id="connectMetamask">Connect MetaMask</button>
+			<br />
+			<br />
+			<div class="hidden">
+				<div id="nftCost"></div>
+				<input id="nftAmount" type="number" min="1" max="20" step="1" value="1"/>
+				<button id="claimNFT">Claim</button>
+				<div class="ownNfts">
+					<h2>Your collectibles</h2>
+					<div class="ownNftsWrapper">
+					</div>
+				</div>
+			</div>
+		</main>
 
 	</body>
 </html> 

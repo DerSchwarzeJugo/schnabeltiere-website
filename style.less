@@ -1,0 +1,62 @@
+@import "css/fonts.less";
+@import "css/colors.less";
+
+
+html {
+	font-size: 20px;
+	body {
+		background-color: @bgColor;
+		color: @mainFontColor;
+		text-align: center;
+		font-size: 1.2rem;
+		main {
+			min-height: 100vh;
+			display: flex;
+			flex-flow: column wrap;
+			align-items: center;
+			justify-content: center;
+			.hidden {
+				display: none;
+			}
+			h1, h2, h3, h4, h5, h6, button, figcaption {
+				font-family: 'Major Mono Display', monospace;
+			}	
+			h1 {
+				font-size: 3rem;
+			}
+			h2 {
+				font-size: 2rem;
+			}
+			input, button {
+				font-size: 1.6rem;
+			}
+			input {
+				width: 45px;
+			}
+			button {
+				font-weight: bold;
+				cursor: pointer;
+			}
+			.ownNfts {
+				.ownNftsWrapper {
+					max-width: 100%;
+					display: flex;
+					justify-content: center;
+					flex-flow: row wrap;
+					figure {
+						padding: 15px;
+						margin: 15px;
+						img {
+							max-width: 300px;
+							max-height: 300px;
+						}
+						figcaption {
+							font-size: 1.4rem;
+						}
+					}
+					
+				}
+			}
+		}
+	}
+}
