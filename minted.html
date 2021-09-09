@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Schnabeltiere</title>
+		<title>Schnabeltiere - Collection</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1">
         <meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<link rel="icon" href="favicons/favicon.ico"/>
 		<link rel="icon" type="image/png" sizes="16x16" href="favicons/favicon-16x16.png"/>
 		<link rel="icon" type="image/png" sizes="32x32" href="favicons/favicon-32x32.png"/>
 		<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="favicons/apple-touch-icon.png"/>
@@ -21,23 +20,22 @@
 	</head>
 	<body>
 		<nav>
+			<a href="./index.html">Home</a>
 			<a href="./about.html">About</a>
-			<a href="./minted.html">Collection</a>
 		</nav>
 		<main>
 			<h1>Schnabeltiere - Fat Plat</h1>
 			<div id="status"></div>
 			<button id="connectMetamask">Connect MetaMask</button>
+			<h3 class="metaMaskInfo">Connect your MetaMask to view which collectibles have already been minted and which are to come.</h3>
 			<br />
 			<br />
 			<div class="hidden">
-				<div id="nftCost"></div>
-				<input id="nftAmount" type="number" min="1" max="20" step="1" value="1"/>
-				<button id="claimNFT">Mint</button>
-				<div class="ownNfts">
-					<h2>Your collectibles</h2>
-					<div class="ownNftsWrapper">
+				<div class="mintedNfts">
+					<h2>All collectibles</h2>
+					<div class="mintedNftsWrapper">
 					</div>
+					<button id="loadMore">Load More</button>
 				</div>
 			</div>
 		</main>

@@ -3,14 +3,45 @@
 
 
 html {
+	margin: 0;
+	padding: 0;
 	font-size: 20px;
 	body {
 		background-color: @bgColor;
 		color: @mainFontColor;
 		text-align: center;
 		font-size: 1.2rem;
+		font-family: 'Cousine', monospace;
+		min-height: 100vh;
+		line-height: 1.5;
+		margin: 0;
+		padding: 0;
+		&.connected .metaMaskInfo {
+			display: none;
+		}
+		a {
+			color: var(--lightColor);
+			text-decoration: none;
+			transition: 0.4s color, 0.4s border-color;
+		}
+		nav {
+			margin: 50px 15px;
+			font-family: 'Major Mono Display', monospace;
+			a {
+				color: @mainFontColor;
+				font-size: 1.6rem;
+				font-weight: bold;
+				padding: 15px;
+				border-right: solid 2px @mainFontColor;
+				border-bottom: solid 2px var(--lightColor);
+				&:hover {
+					color: var(--lightColor);
+					border-right-color: var(--lightColor);
+					border-bottom-color: @mainFontColor;
+				}
+			}
+		}
 		main {
-			min-height: 100vh;
 			display: flex;
 			flex-flow: column wrap;
 			align-items: center;
@@ -20,6 +51,8 @@ html {
 			}
 			h1, h2, h3, h4, h5, h6, button, figcaption {
 				font-family: 'Major Mono Display', monospace;
+				color: var(--lightColor);
+				line-height: 2;
 			}	
 			h1 {
 				font-size: 3rem;
@@ -31,30 +64,54 @@ html {
 				font-size: 1.6rem;
 			}
 			input {
-				width: 45px;
+				width: 75px;
+				background-color: transparent;
+				border: none;
+				color: @mainFontColor;
+				margin: 15px;
+				padding: 5px;
 			}
 			button {
 				font-weight: bold;
 				cursor: pointer;
+				color: @bgColor;
+				padding: 5px 20px;
 			}
-			.ownNfts {
-				.ownNftsWrapper {
+			#status, #nftCost {
+				margin: 15px;
+				font-size: 1.4rem;
+			}
+			.mintedNfts button {
+				margin-bottom: 50px;
+			}
+			.ownNfts, .mintedNfts {
+				.ownNftsWrapper, .mintedNftsWrapper {
 					max-width: 100%;
 					display: flex;
 					justify-content: center;
 					flex-flow: row wrap;
-					figure {
-						padding: 15px;
-						margin: 15px;
-						img {
-							max-width: 300px;
-							max-height: 300px;
-						}
-						figcaption {
-							font-size: 1.4rem;
-						}
+				}
+				figure {
+					img {
+						max-width: 300px;
+						max-height: 300px;
+						
 					}
-					
+				}
+			}
+			figure {
+				padding: 15px;
+				margin: 15px;
+				img {
+					max-width: 400px;
+					max-height: 400px;
+					&.filtered {
+						filter: brightness(40%) blur(3px);
+					}
+				}
+				figcaption {
+					font-size: 1.4rem;
+					color: @mainFontColor;
 				}
 			}
 		}
