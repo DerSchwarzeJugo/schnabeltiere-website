@@ -1,6 +1,6 @@
 import { ethers } from "./js/ethers-5.2.esm.min.js";
 
-var provider, signer, address, smartContract, cost, connected, uriList, supply, revealed
+var provider, signer, address, smartContract, cost, connected, uriList, supply, revealed, owner
 
 // base url for pulling imgs
 const baseUrl = "https://nft.derschwarzejugo.com/schnabeltiere/metadata/Fat%20Plat%20%23"
@@ -14,7 +14,8 @@ const contractAbi = [
 	"function tokenURI(uint256 tokenId)	public view	returns (string)",
 	"function walletOfOwner(address _owner)	public view returns (uint256[])",
 	"function cost() public view returns (uint256)",
-	"function totalSupply() public view returns (uint256)"
+	"function totalSupply() public view returns (uint256)",
+	"function owner() public view returns(address)"
 ]
 
 let connectInterval = setInterval(() => {
@@ -83,7 +84,7 @@ $("#claimNFT").on("click", async () => {
 	try {
 		await smartContract.connect(signer).mint(address, amount, overrides).then(() => getOwnWallet(amount))
 	} catch (error) {
-		$("#status").html("Somethin went wrong, try again.")
+		$("#status").html(error.data.message)
 		console.log(error);
 	}
 })
@@ -104,6 +105,7 @@ const init = () => {
 		.then(() => getOwnWallet())
 		.then(() => getSupply())
 		.then(() => getImgToMint())
+		.then(() => checkIfOwner())
 	getCost()
 }
 
@@ -115,10 +117,20 @@ async function getAddress () {
 	}
 }
 
+async function checkIfOwner () {
+	try {
+		owner = await smartContract.connect(address).owner()
+		if (owner == address) {
+			cost = 0	
+		}
+	} catch (error) {
+	}
+}
+
 async function getCost () {
 	try {
 		cost = ethers.utils.formatEther(await smartContract.cost())
-		let innerText = "Current price: " + cost + ethers.constants.EtherSymbol
+		let innerText = "Current price: " + cost + " MATIC"
 		$("#nftCost").text(innerText)
 	} catch (error) {
 		console.log(error)
