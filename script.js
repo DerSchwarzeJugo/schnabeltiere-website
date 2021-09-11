@@ -6,7 +6,7 @@ var provider, signer, address, smartContract, cost, connected, uriList, supply, 
 const baseUrl = "https://nft.derschwarzejugo.com/schnabeltiere/metadata/Fat%20Plat%20%23"
 
 // smart contract
-const contractAddress = "0x309e1C704a2F1F5bfD886Fe8823DE67a84c2da01"
+const contractAddress = "0xEEB3c9DA6FD8E00420Fe2792F20bA7EAD2ad4a39"
 
 // declared functions which you want to use of the contract (not necessairly all)
 const contractAbi = [
