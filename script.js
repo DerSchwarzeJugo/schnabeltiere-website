@@ -82,7 +82,9 @@ $("#claimNFT").on("click", async () => {
 		value: ethers.utils.parseEther(String(amount * cost))     // ether in this case MUST be a string
 	}
 	try {
-		await smartContract.connect(signer).mint(address, amount, overrides).then(() => getOwnWallet(amount))
+		await smartContract.connect(signer).mint(address, amount, overrides)
+			.then(() => getOwnWallet(amount))
+			.then(() => getImgToMint(amount))
 	} catch (error) {
 		$("#status").html(error.data.message)
 		console.log(error);
@@ -137,15 +139,25 @@ async function getCost () {
 	}
 }
 
-async function getImgToMint() {
+async function getImgToMint(amount = false) {
 	if ($(".ownNfts").length > 0) {
 		try {
 			let innerSupply = await smartContract.connect(address).totalSupply()
 			let element = baseUrl + innerSupply + ".png"
 			let split = element.split("/")
 			let name = decodeURIComponent(split[split.length - 1].replace(".png", ""))
-			let img = "<figure><img src='" + element.replace("metadata", "images") + "' title='" + name + "' alt='Image of NFT " + name + "' /><figcaption>Claim your " + name + " right now!</figcaption></figure>"
-			$("#nftCost").parent().prepend(img)	
+			let src = element.replace("metadata", "images") 
+			let img = "<figure><img src='" + src + "' title='" + name + "' alt='Image of NFT " + name + "'><figcaption>Claim your " + name + " right now!</figcaption></figure>"
+			if(amount && amount > 0) {
+				if(src == $("#nftCost").prev().find("img").attr("src")) {
+					getImgToMint(amount)
+				} else {
+					$("#nftCost").prev().remove()
+					$("#nftCost").parent().prepend(img)	
+				}
+			} else {
+				$("#nftCost").parent().prepend(img)	
+			}
 		} catch (error) {
 			console.log(error)	
 		}
@@ -199,7 +211,7 @@ async function getOwnWallet (appended = false) {
 			} else {
 				let imgCollection = $(".ownNftsWrapper figure img") 
 				let expectedEl = imgCollection[imgCollection.length - appended]
-				let expectedImg = $(expectedEl).last().attr("src")
+				let expectedImg = $(expectedEl).attr("src")
 				let currentImg = uriList[uriList.length - appended].replace("metadata", "images").replace(".json", ".png")
 				// checking if newest nft already has been loaded
 				if (expectedImg == currentImg) {
