@@ -1,6 +1,6 @@
 import { ethers } from "./js/ethers-5.2.esm.min.js";
 
-var provider, signer, address, smartContract, cost, connected, uriList, supply, revealed, owner
+var provider, signer, address, smartContract, cost, connected, uriList, supply, revealed, owner, whitelisted
 
 // base url for pulling imgs
 const baseUrl = "https://nft.derschwarzejugo.com/schnabeltiere/metadata/Fat%20Plat%20%23"
@@ -15,7 +15,8 @@ const contractAbi = [
 	"function walletOfOwner(address _owner)	public view returns (uint256[])",
 	"function cost() public view returns (uint256)",
 	"function totalSupply() public view returns (uint256)",
-	"function owner() public view returns(address)"
+	"function owner() public view returns(address)",
+	"function whitelisted(address _address) public view returns (bool)",
 ]
 
 let connectInterval = setInterval(() => {
@@ -107,7 +108,7 @@ const init = () => {
 		.then(() => getOwnWallet())
 		.then(() => getSupply())
 		.then(() => getImgToMint())
-		.then(() => checkIfOwner())
+		.then(() => checkIfOwnerOrWhitelisted())
 	getCost()
 }
 
@@ -119,13 +120,15 @@ async function getAddress () {
 	}
 }
 
-async function checkIfOwner () {
+async function checkIfOwnerOrWhitelisted () {
 	try {
 		owner = await smartContract.connect(address).owner()
-		if (owner == address) {
+		whitelisted = await smartContract.connect(address).whitelisted(address)
+		if (owner == address || whitelisted == true) {
 			cost = 0	
 		}
 	} catch (error) {
+		console.log(error)
 	}
 }
 
