@@ -93,10 +93,11 @@ $("#claimNFT").on("click", async () => {
 })
 
 $("#loadMore").on("click", async () => {
-	let interval = revealed + 20
+	let interval = revealed + 25
 	for (revealed; revealed < interval; revealed++) {
+		let mintedAlready = revealed >= supply
 		let element = baseUrl + revealed + ".json"
-		createAppendImg(element, $(".mintedNftsWrapper"), true)
+		createAppendImg(element, $(".mintedNftsWrapper"), mintedAlready)
 	}	
 })
 
@@ -172,20 +173,15 @@ async function getSupply() {
 		try {
 			supply = await smartContract.connect(address).totalSupply()
 			supply = supply.toNumber()
-			for (let i = 0; i < supply; i++) {
-				let element = baseUrl + i + ".json"
-				createAppendImg(element, $(".mintedNftsWrapper"))
+			
+			if (!revealed > 0)
+				revealed = 0
+			let interval = revealed + 25
+			for (revealed; revealed < interval; revealed++) {
+				let mintedAlready = revealed >= supply
+				let element = baseUrl + revealed + ".json"
+				createAppendImg(element, $(".mintedNftsWrapper"), mintedAlready)
 			}
-			setTimeout(() => {
-				if (!revealed > 0) {
-					revealed = supply
-				}
-				let interval = revealed + 20
-				for (revealed; revealed < interval; revealed++) {
-					let element = baseUrl + revealed + ".json"
-					createAppendImg(element, $(".mintedNftsWrapper"), true)
-				}
-			}, 1000);
 
 		} catch (error) {
 			console.log(error)
