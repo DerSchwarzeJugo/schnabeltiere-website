@@ -34,6 +34,7 @@ $(window).on("load", async () => {
 	await callSeparateProvider()
 		.then(() => getImgToMint())
 		.then(() =>	$(".hidden").removeClass('hidden'))
+		.then(() => getSupply())
 	
 	if (!window.ethereum) {
 		$('#status').html('Please install or allow Metamask!!')
@@ -110,11 +111,11 @@ const init = () => {
 	smartContract = new ethers.Contract(contractAddress, contractAbi, provider)
 	getAddress()
 		.then(() => getOwnWallet())
-		.then(() => getSupply())
 		.then(() => checkIfOwnerOrWhitelisted())
 	getCost()
 }
 
+// gets run on jquery.load to provide simple functionality before connecting to metamask
 const callSeparateProvider = async () => {
 	separateProvider = new ethers.providers.JsonRpcProvider()
 	// giving provider to contract = only getters possible
@@ -180,7 +181,7 @@ async function getImgToMint(amount = false) {
 async function getSupply() {
 	if ($(".mintedNfts").length > 0) {
 		try {
-			supply = await smartContract.connect(address).totalSupply()
+			supply = await separateContract.totalSupply()
 			supply = supply.toNumber()
 			
 			if (!revealed > 0)
