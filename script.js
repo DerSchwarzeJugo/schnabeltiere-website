@@ -1,12 +1,10 @@
 import { ethers } from "./js/ethers-5.2.esm.min.js";
 
-var provider, signer, address, smartContract, cost, connected, uriList, supply, revealed, owner, whitelisted
-
-// base url for pulling imgs
-const baseUrl = "https://nft.derschwarzejugo.com/schnabeltiere/metadata/Fat%20Plat%20%23"
+var provider, signer, address, smartContract, separateProvider, separateContract, cost, connected, uriList, supply, revealed, owner, whitelisted, baseUrl
 
 // smart contract
-const contractAddress = "0xEEB3c9DA6FD8E00420Fe2792F20bA7EAD2ad4a39"
+// const contractAddress = "0xEEB3c9DA6FD8E00420Fe2792F20bA7EAD2ad4a39"
+const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
 
 // declared functions which you want to use of the contract (not necessairly all)
 const contractAbi = [
@@ -17,6 +15,7 @@ const contractAbi = [
 	"function totalSupply() public view returns (uint256)",
 	"function owner() public view returns(address)",
 	"function whitelisted(address _address) public view returns (bool)",
+	"function baseTokenURI() public view returns (string memory)"
 ]
 
 let connectInterval = setInterval(() => {
@@ -25,12 +24,17 @@ let connectInterval = setInterval(() => {
 		$("#connectMetamask").addClass('hidden')
 		clearInterval(connectInterval)
 	}
-}, 3000)
+}, 1000)
 
 
 
 // listeners
 $(window).on("load", async () => {
+	// wait to fetch contract base address
+	await callSeparateProvider()
+		.then(() => getImgToMint())
+		.then(() =>	$(".hidden").removeClass('hidden'))
+	
 	if (!window.ethereum) {
 		$('#status').html('Please install or allow Metamask!!')
 	} else {
@@ -42,7 +46,6 @@ $(window).on("load", async () => {
 			$("body").addClass('connected')
 			init()
 		} catch (error) {
-			connected = false
 			console.log(error)
 		}
 	}
@@ -108,9 +111,15 @@ const init = () => {
 	getAddress()
 		.then(() => getOwnWallet())
 		.then(() => getSupply())
-		.then(() => getImgToMint())
 		.then(() => checkIfOwnerOrWhitelisted())
 	getCost()
+}
+
+const callSeparateProvider = async () => {
+	separateProvider = new ethers.providers.JsonRpcProvider()
+	// giving provider to contract = only getters possible
+	separateContract = new ethers.Contract(contractAddress, contractAbi, separateProvider).connect(separateProvider)
+	baseUrl = await separateContract.baseTokenURI()
 }
 
 async function getAddress () {
@@ -146,7 +155,7 @@ async function getCost () {
 async function getImgToMint(amount = false) {
 	if ($(".ownNfts").length > 0) {
 		try {
-			let innerSupply = await smartContract.connect(address).totalSupply()
+			let innerSupply = await separateContract.totalSupply()
 			let element = baseUrl + innerSupply + ".png"
 			let split = element.split("/")
 			let name = decodeURIComponent(split[split.length - 1].replace(".png", ""))
