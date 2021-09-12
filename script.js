@@ -195,6 +195,12 @@ async function getOwnWallet (appended = false) {
 	if ($(".ownNfts").length > 0) {
 		try {
 			const walletOfOwner = await smartContract.connect(signer).walletOfOwner(address)
+			let prevListLength
+			if ($.isArray(uriList)) {
+				prevListLength = uriList.length
+			} else {
+				prevListLength = 0
+			}
 			uriList = []
 			for (let i = 0; i <= walletOfOwner.length - 1; i++) {
 				try {
@@ -204,21 +210,17 @@ async function getOwnWallet (appended = false) {
 				}
 			}
 			if (!appended) {
+				// gets called on load
 				uriList.forEach(element => {
 					createAppendImg(element, $(".ownNftsWrapper"))	
 				});
 			} else {
-				let imgCollection = $(".ownNftsWrapper figure img") 
-				let expectedEl = imgCollection[imgCollection.length - appended]
-				let expectedImg = $(expectedEl).attr("src")
-				let currentImg = uriList[uriList.length - appended].replace("metadata", "images").replace(".json", ".png")
-				// checking if newest nft already has been loaded
-				if (expectedImg == currentImg) {
+				// gets called after minting with amount in var appended
+				if (uriList == undefined || Number(prevListLength) + Number(appended) > uriList.length) {
 					setTimeout(() => {
 						getOwnWallet(appended)
 					}, 1000);
 				} else {
-					// if not false, appended equals amount of minted elements
 					for (appended; appended > 0; appended--) {
 						createAppendImg(uriList[uriList.length - appended], $(".ownNftsWrapper"))
 					}
@@ -231,8 +233,19 @@ async function getOwnWallet (appended = false) {
 }
 
 function createAppendImg(element, wrapper, filtered = false) {
-	let split = element.split("/")
-	let name = decodeURIComponent(split[split.length - 1].split(".json")[0])
-	let img = "<figure><img " + (filtered ? "class='filtered'" : "") + " src='" + element.replace("metadata", "images").replace(".json", ".png") + "' title='" + name + "' alt='Image of NFT " + name + "' /><figcaption>" + name + "</figcaption></figure>"
-	wrapper.append(img)
+	let existingImgs = $.map(wrapper.find("figure img"), function(val, i) {
+		return $(val).attr("src")
+	})
+	// $.inArray returns index or -1
+	if (existingImgs.length > 0 && $.inArray(element, existingImgs) > -1) {
+		// element already exists on the page
+	} else {
+		// when blockchain confirms, element should be in uriList
+		let split = element.split("/")
+		let name = decodeURIComponent(split[split.length - 1].split(".json")[0])
+		let img = "<figure><img " + (filtered ? "class='filtered'" : "") + " src='" + element.replace("metadata", "images").replace(".json", ".png") + "' title='" + name + "' alt='Image of NFT " + name + "' /><figcaption>" + name + "</figcaption></figure>"
+		wrapper.append(img)
+		if ($.inArray(element, uriList) > -1) {
+		}
+	}
 }
