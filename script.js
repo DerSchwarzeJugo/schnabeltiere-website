@@ -5,6 +5,9 @@ var provider, signer, address, smartContract, separateProvider, separateContract
 // smart contract
 const contractAddress = "0xEEB3c9DA6FD8E00420Fe2792F20bA7EAD2ad4a39"
 
+// network rpc url
+const networkUrl = "https://polygon-rpc.com/"
+
 // declared functions which you want to use of the contract (not necessairly all)
 const contractAbi = [
 	"function mint(address _to, uint256 _mintAmount) public payable",
@@ -116,7 +119,7 @@ const init = () => {
 
 // gets run on jquery.load to provide simple functionality before connecting to metamask
 const callSeparateProvider = async () => {
-	separateProvider = new ethers.providers.JsonRpcProvider()
+	separateProvider = new ethers.providers.JsonRpcProvider(networkUrl)
 	// giving provider to contract = only getters possible
 	separateContract = new ethers.Contract(contractAddress, contractAbi, separateProvider).connect(separateProvider)
 	baseUrl = await separateContract.baseTokenURI()
