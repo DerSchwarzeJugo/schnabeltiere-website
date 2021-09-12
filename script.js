@@ -3,8 +3,7 @@ import { ethers } from "./js/ethers-5.2.esm.min.js";
 var provider, signer, address, smartContract, separateProvider, separateContract, cost, connected, uriList, supply, revealed, owner, whitelisted, baseUrl
 
 // smart contract
-// const contractAddress = "0xEEB3c9DA6FD8E00420Fe2792F20bA7EAD2ad4a39"
-const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+const contractAddress = "0xEEB3c9DA6FD8E00420Fe2792F20bA7EAD2ad4a39"
 
 // declared functions which you want to use of the contract (not necessairly all)
 const contractAbi = [
