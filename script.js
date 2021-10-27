@@ -39,7 +39,7 @@ $(window).on("load", async () => {
 		.then(() => getSupply())
 	
 	if (!window.ethereum) {
-		$('#status').html('Please install or allow Metamask!!')
+		$('#status').html('Connect your MetaMask now to see current price and mint your own Fat Plat.')
 	} else {
 		provider = new ethers.providers.Web3Provider(window.ethereum)
 		signer = provider.getSigner()
@@ -77,7 +77,7 @@ $("#connectMetamask").on("click", async () => {
 			console.log(error)
 		}
 	} else {
-		$('#status').html('Please install or allow Metamask!!')
+		$('#status').html('Connect your MetaMask now to see current price and mint your own Fat Plat.')
 		connected = false
 	}
 })
